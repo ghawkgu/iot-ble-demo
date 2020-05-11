@@ -1,0 +1,41 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${env:ARM_GCC}/include/**",
+                "${env:nRF_SDK}/modules/**",
+                "${env:nRF_SDK}/components/**"
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": false,
+                "path": [
+                    "${workspaceFolder}/**",
+                    "${env:ARM_GCC}/include/**",
+                    "${env:nRF_SDK}/modules/**",
+                    "${env:nRF_SDK}/components/**"
+                ]
+            },
+            "defines": [
+                "APP_TIMER_V2",
+                "APP_TIMER_V2_RTC1_ENABLED",
+                "BOARD_PCA10040",
+                "CONFIG_GPIO_AS_PINRESET",
+                "DEVELOP_IN_NRF52832",
+                "FLOAT_ABI_SOFT",
+                "NRF52810_XXAA",
+                "NRF52_PAN_74",
+                "NRFX_COREDEP_DELAY_US_LOOP_CYCLES=3",
+                "NRF_SD_BLE_API_VERSION=7",
+                "S113",
+                "SOFTDEVICE_PRESENT"
+            ],
+            "compilerPath": "${env:ARM_GCC}/bin/arm-none-eabi-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}

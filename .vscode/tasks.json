@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "make clean",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "flash",
+            "type": "shell",
+            "command": "make flash",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "flash_softdevice",
+            "type": "shell",
+            "command": "make flash_softdevice",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "sdk_config",
+            "type": "shell",
+            "command": "make sdk_config",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "erase",
+            "type": "shell",
+            "command": "make erase",
+            "options": {
+                "cwd": "${workspaceFolder}/armgcc"
+            },
+            "problemMatcher": []
+        }
+    ]
+}

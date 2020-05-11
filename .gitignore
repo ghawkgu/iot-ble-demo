@@ -1,0 +1,8 @@
+# ses
+Output
+
+# armgcc
+_build
+
+# vscode plugin temp file
+**/.vscode/.cortex-debug*.json
