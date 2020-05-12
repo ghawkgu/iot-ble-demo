@@ -7,7 +7,7 @@
         {
             "armToolchainPath": "${env:ARM_GCC}/bin",
             "cwd": "${workspaceRoot}",
-            "executable": "./armgcc/_build/nrf52810_xxaa.out",
+            "executable": "./armgcc/_build/nrf52811_xxaa.out",
             "name": "Debug Microcontroller",
             "request": "launch",
             "type": "cortex-debug",
