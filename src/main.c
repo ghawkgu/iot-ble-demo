@@ -319,7 +319,7 @@ static void tps_init(void)
     memset(&tps_init_obj, 0, sizeof(tps_init_obj));
     tps_init_obj.initial_tx_power_level = TX_POWER_LEVEL;
 
-    tps_init_obj.tpl_rd_sec = SEC_JUST_WORKS;
+    tps_init_obj.tpl_rd_sec = SEC_OPEN;
 
     err_code = ble_tps_init(&m_tps, &tps_init_obj);
     APP_ERROR_CHECK(err_code);
@@ -592,7 +592,7 @@ static void idle_state_handle(void)
  */
 static void tx_power_set(void)
 {
-    ret_code_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, m_advertising.adv_handle, TX_POWER_LEVEL);
+    ret_code_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, m_adv_handle, TX_POWER_LEVEL);
     APP_ERROR_CHECK(err_code);
 }
 
