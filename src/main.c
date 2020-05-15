@@ -60,6 +60,8 @@
 #include "app_timer.h"
 #include "app_button.h"
 #include "ble_lbs.h"
+#include "ble_tps.h"
+#include "ble_advertising.h"
 #include "nrf_ble_gatt.h"
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
@@ -94,12 +96,16 @@
 
 #define BUTTON_DETECTION_DELAY          APP_TIMER_TICKS(50)                     /**< Delay from a GPIOTE event until a button is reported as pushed (in number of timer ticks). */
 
+#define TX_POWER_LEVEL                  (-8)                                    /**< TX Power Level value. This will be set both in the TX Power service, in the advertising data, and also used to set the radio transmit power. */
+
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 
 BLE_LBS_DEF(m_lbs);                                                             /**< LED Button Service instance. */
+BLE_TPS_DEF(m_tps);                                                             /**< TX Power service instance. */
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
+BLE_ADVERTISING_DEF(m_advertising);                                             /**< Advertising module instance. */
 
 static uint16_t m_conn_handle = BLE_CONN_HANDLE_INVALID;                        /**< Handle of the current connection. */
 
@@ -212,7 +218,10 @@ static void advertising_init(void)
     ble_advdata_t advdata;
     ble_advdata_t srdata;
 
-    ble_uuid_t adv_uuids[] = {{LBS_UUID_SERVICE, m_lbs.uuid_type}};
+    ble_uuid_t adv_uuids[] = {
+        {LBS_UUID_SERVICE, m_lbs.uuid_type},
+        {BLE_UUID_TX_POWER_SERVICE, BLE_UUID_TYPE_BLE}
+    };
 
     // Build and set advertising data.
     memset(&advdata, 0, sizeof(advdata));
@@ -281,10 +290,7 @@ static void led_write_handler(uint16_t conn_handle, ble_lbs_t * p_lbs, uint8_t l
     }
 }
 
-
-/**@brief Function for initializing services that will be used by the application.
- */
-static void services_init(void)
+void bls_init(void)
 {
     ret_code_t         err_code;
     ble_lbs_init_t     init     = {0};
@@ -303,6 +309,29 @@ static void services_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
+/**@brief Function for initializing the TX Power Service.
+ */
+static void tps_init(void)
+{
+    ret_code_t     err_code;
+    ble_tps_init_t tps_init_obj;
+
+    memset(&tps_init_obj, 0, sizeof(tps_init_obj));
+    tps_init_obj.initial_tx_power_level = TX_POWER_LEVEL;
+
+    tps_init_obj.tpl_rd_sec = SEC_OPEN;
+
+    err_code = ble_tps_init(&m_tps, &tps_init_obj);
+    APP_ERROR_CHECK(err_code);
+}
+
+/**@brief Function for initializing services that will be used by the application.
+ */
+static void services_init(void)
+{
+    bls_init();
+    tps_init();
+}
 
 /**@brief Function for handling the Connection Parameters Module.
  *
@@ -559,6 +588,13 @@ static void idle_state_handle(void)
     }
 }
 
+/**@brief Function for changing the tx power.
+ */
+static void tx_power_set(void)
+{
+    ret_code_t err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_ADV, m_adv_handle, TX_POWER_LEVEL);
+    APP_ERROR_CHECK(err_code);
+}
 
 /**@brief Function for application main entry.
  */
@@ -580,6 +616,7 @@ int main(void)
     // Start execution.
     NRF_LOG_INFO("Blinky example started.");
     advertising_start();
+    tx_power_set();
 
     // Enter main loop.
     for (;;)

@@ -64,6 +64,8 @@ SRC_FILES += \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh.c \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh_ble.c \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_tps/ble_tps.c \
+  $(SDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
